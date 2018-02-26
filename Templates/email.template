@@ -1,0 +1,9 @@
+﻿Dear {{FirstName}},
+
+Your past-due account balance of ${{AmountPastDue}} is now {{DaysPastDue}} days 
+past due. Please pay this balance or contact Beth at our 
+Accounts Receivable department within three days or we will 
+pursue immediate legal action. 
+
+
+

@@ -1,0 +1,96 @@
+﻿Using System
+Using System.Data
+Using System.Configuration
+Using System.Collections
+Using System.Web
+Using System.Text
+Using System.Web.Security
+Using System.Web.UI
+Using System.Web.UI.WebControls
+Using System.Web.UI.WebControls.WebParts
+Using System.Web.UI.HtmlControls
+Using System.IO 
+
+BegClass Index Partial(*Yes) Access(*Public) Extends(System.Web.UI.Page)
+
+	DclArray Keys Type(*String) Rank(1) Access(*Protected) 
+
+    BegSr Page_Load Access(*Private) Event(*This.Load)
+        DclSrParm sender Type(*Object)
+        DclSrParm e Type(System.EventArgs)
+	
+		// Set page title. 
+		Page.Title = 'Index'
+
+		DclFld CMFName Type(*Char) Len(30)
+		DclFld CMDaysPD Type(*Packed) Len(10,0)
+		DclFld CMActBal Type(*Packed) Len(12,2)
+
+		CMFName = 'Bob'
+		CMDaysPD = 71
+		CMActBal = 32434.23
+
+		DclFld FileName Type(*String) 
+		DclFld FileContents Type(*String) 
+		DclFld TemplateBuffer Type(StringBuilder) New(1024)
+
+		FileName = Server.MapPath('~/Templates')
+		FileName += '\email.template'
+
+		FileContents = File.ReadAllText(FileName) 
+		TemplateBuffer.Insert(0,FileContents, 1)
+		TemplateBuffer.Replace('{{FirstName}}', CMFName.Trim())
+		TemplateBuffer.Replace('{{DaysPastDue}}', CMDaysPD.ToString('#,###'))
+		TemplateBuffer.Replace('{{AmountPastDue}}', CMActBal.ToString('#,###.00'))
+
+
+		FileName = TemplateBuffer.ToString()
+
+		FileName = Server.MapPath('~/Templates')
+		FileName += '\email.out'
+
+		File.WriteAllText(FileName, TemplateBuffer.ToString())
+
+
+
+		DclFld CurrentMaster Type(HomeMaster) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		CurrentMaster = *This.Master *As HomeMaster
+		CurrentMaster.ChildPage = *New FileInfo(*This.Request.Url.LocalPath).Name
+		CurrentMaster.PageHeading = 'Main page'
+
+        If (NOT Page.IsPostBack)
+            //
+            // Called the first time that the page is loaded.
+            //
+        Else
+            //
+            // Called subsequent times that the page is displayed.
+            //
+        EndIf
+    EndSr
+
+    BegSr Page_Unload Access(*Private) Event(*This.Unload)
+        DclSrParm sender Type(*Object)
+        DclSrParm e Type(System.EventArgs)
+
+        //
+        // Called when the page is unloaded.
+        //
+    EndSr
+		
+	
+EndClass
